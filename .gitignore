@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+src/main/resources/
+
+# Testing
+insight_testsuite/temp/
+paymo_input/
+paymo_output/
