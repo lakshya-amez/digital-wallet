@@ -16,7 +16,7 @@ public class BreadthFirstSearchTest {
     private GraphSearch<Integer> searchAlgorithm;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         graph = new UndirectedGraph<>();
 
         graph.addVertex(0);

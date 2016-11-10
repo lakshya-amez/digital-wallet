@@ -3,7 +3,9 @@ package data;
 import com.google.common.annotations.VisibleForTesting;
 import model.Transaction;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * A database of the last K transactions performed by a user.
@@ -21,15 +23,13 @@ public class UserTransactionHistory {
         receivedTransactions = new HashMap<>();
     }
 
-    private static class LazyHolder {
-        private static final UserTransactionHistory INSTANCE = new UserTransactionHistory();
-    }
     public static UserTransactionHistory getInstance() {
         return LazyHolder.INSTANCE;
     }
 
     /**
      * Add a transaction to the database. Entries are added for both the sender and the recipient in the respective transaction lists.
+     *
      * @param transaction the {@link Transaction} to be added
      * @return {@code true} indicating {@link Transaction} was successfully added.
      */
@@ -59,6 +59,7 @@ public class UserTransactionHistory {
 
     /**
      * Returns a maximum of K of the most recent transactions of the user in which he was the sender.
+     *
      * @param userID senderUID
      * @return List of {@link Transaction}s
      */
@@ -68,6 +69,7 @@ public class UserTransactionHistory {
 
     /**
      * Returns a maximum of K of the most recent transactions of the user in which he was the recipient.
+     *
      * @param userID recipientUID
      * @return List of {@link Transaction}s
      */
@@ -79,6 +81,10 @@ public class UserTransactionHistory {
     public void clear() {
         sentTransactions = new HashMap<>();
         receivedTransactions = new HashMap<>();
+    }
+
+    private static class LazyHolder {
+        private static final UserTransactionHistory INSTANCE = new UserTransactionHistory();
     }
 
 }

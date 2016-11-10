@@ -1,13 +1,17 @@
 import core.TransactionParser;
 import core.TransactionValidations;
-//import data.EnrichedUserTransactionGraph;
 import data.TransactionQueue;
 import data.UserTransactionGraph;
 import data.UserTransactionHistory;
 import lombok.Getter;
 import model.Transaction;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+//import data.EnrichedUserTransactionGraph;
 
 /**
  * Main program
@@ -32,11 +36,11 @@ public class AntiFraud implements Closeable {
 
         transactionValidations = TransactionValidations.getInstance();
 
-        batchTransactionQueue = new TransactionQueue(args[0]);
-        streamingTransactionQueue = new TransactionQueue(args[1]);
+        batchTransactionQueue = new TransactionQueue(args[0]); // batch input file
+        streamingTransactionQueue = new TransactionQueue(args[1]); // streaming input file
 
-        outputFiles = new PrintWriter[5];
-        for (int i=0; i<5; i++) {
+        outputFiles = new PrintWriter[5]; // feature output files
+        for (int i = 0; i < 5; i++) {
             try {
                 outputFiles[i] = new PrintWriter(new FileWriter(args[i + 2]));
             } catch (IOException e) {
@@ -45,6 +49,22 @@ public class AntiFraud implements Closeable {
         }
 
         init();
+    }
+
+    public static void main(String args[]) {
+
+        AntiFraud antiFraud = new AntiFraud(args);
+
+        try {
+            antiFraud.run();
+        } finally {
+            try {
+                antiFraud.close();
+            } catch (IOException e) {
+                System.out.println("Unable to close file handlers");
+            }
+        }
+
     }
 
     /**
@@ -62,7 +82,7 @@ public class AntiFraud implements Closeable {
             userTransactionGraph.updateGraph(t);
             userTransactionHistory.addTransaction(t);
         }
-        System.out.println("Caching user friend circles in enriched graph...");
+        //System.out.println("Caching user friend circles in enriched graph...");
         //enrichedUserTransactionGraph.enrichUserTransactionGraph();
         System.out.println("Initialization Complete!");
     }
@@ -74,7 +94,7 @@ public class AntiFraud implements Closeable {
     private void run() {
         String csvString;
         Transaction t;
-        int cnt = 0;
+        //int cnt = 0;
         long startTime = System.currentTimeMillis();
         System.out.println("Beginning streaming...");
         while ((csvString = streamingTransactionQueue.getTransaction()) != null) {
@@ -89,10 +109,10 @@ public class AntiFraud implements Closeable {
             outputFiles[4].println(transactionValidations.isAmountInconsistent(t));
             userTransactionGraph.updateGraph(t);
             userTransactionHistory.addTransaction(t);
-            cnt++;
-            if (cnt % 1000 == 0) {
+            //cnt++;
+            /*if (cnt % 1000 == 0) {
                 System.out.println(cnt);
-            }
+            }*/
         }
         System.out.println("Streaming Complete! Time taken: " + (System.currentTimeMillis() - startTime) / 1000.0 + " s");
     }
@@ -101,25 +121,9 @@ public class AntiFraud implements Closeable {
     public void close() throws IOException {
         batchTransactionQueue.close();
         streamingTransactionQueue.close();
-        for (PrintWriter outputFile: outputFiles) {
+        for (PrintWriter outputFile : outputFiles) {
             outputFile.close();
         }
-    }
-
-    public static void main(String args[]) {
-
-        AntiFraud antiFraud = new AntiFraud(args);
-
-        try {
-            antiFraud.run();
-        } finally {
-            try {
-                antiFraud.close();
-            } catch (IOException e) {
-                System.out.println("Unable to close file handlers");
-            }
-        }
-
     }
 
 }

@@ -10,6 +10,7 @@ public class Statistics {
 
     /**
      * Calculates the <b>mean</b> of a collection of values.
+     *
      * @param vals list of {@code double} values.
      * @return single {@code double} value representing the <b>mean</b> of {@code vals}.
      */
@@ -26,6 +27,7 @@ public class Statistics {
 
     /**
      * Calculates the <b>variance</b> of a collection of values.
+     *
      * @param vals list of {@code double} values.
      * @return single {@code double} value representing the <b>variance</b> of {@code vals}.
      */
@@ -40,6 +42,7 @@ public class Statistics {
 
     /**
      * Calculates the <b>standard deviation</b> of a collection of values.
+     *
      * @param vals list of {@code double} values.
      * @return single {@code double} value representing the <b>standard deviation</b> of {@code vals}.
      */
@@ -49,9 +52,10 @@ public class Statistics {
 
     /**
      * Applies the <b>Z-score method</b> to check whether {@code value} is an outlier for the distribution given by {@code vals}.
-     * @param vals list of double values that are a representative of the historical distribution of values.
+     *
+     * @param vals  list of double values that are a representative of the historical distribution of values.
      * @param value value to be tested as an outlier for the given distribution.
-     * @return {@code boolean} value indication whether {@code value} is an outlier or not for the given distribution.
+     * @return {@code boolean} value indicating whether {@code value} is an outlier or not for the given distribution.
      */
     public static boolean isOutlier(List<Double> vals, double value) {
         double mu = mean(vals);

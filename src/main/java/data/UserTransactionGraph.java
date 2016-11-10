@@ -21,10 +21,6 @@ public class UserTransactionGraph extends UndirectedGraph<Long> {
         searchAlgorithm = GraphSearchFactory.getGraphTraversalImplementation(GraphSearchAlgorithm.BFS);
     }
 
-    private static class LazyHolder {
-        private static final UserTransactionGraph INSTANCE = new UserTransactionGraph();
-    }
-
     public static UserTransactionGraph getInstance() {
         return LazyHolder.INSTANCE;
     }
@@ -32,10 +28,11 @@ public class UserTransactionGraph extends UndirectedGraph<Long> {
     /**
      * Updates the graph with a {@link Transaction}:
      * <ol>
-     *     <li> Add {@code senderUID} as a vertex. </li>
-     *     <li> Add {@code recipientUID} as a vertex. </li>
-     *     <li> Add an edge between the two user IDs. </li>
+     * <li> Add {@code senderUID} as a vertex. </li>
+     * <li> Add {@code recipientUID} as a vertex. </li>
+     * <li> Add an edge between the two user IDs. </li>
      * </ol>
+     *
      * @param transaction The {@link Transaction} with which to update the graph.
      * @return {@code boolean} value indicating whether transaction was successfully added to the graph.
      */
@@ -47,13 +44,15 @@ public class UserTransactionGraph extends UndirectedGraph<Long> {
 
     /**
      * Check whether recipient is in sender's friend circle up to given max degree.
+     *
      * @param transaction The user for which to fetch the friend circle.
-     * @param maxDegree The max degree of friendship to be considered.
+     * @param maxDegree   The max degree of friendship to be considered.
      * @return {@code int} value indicating degree of friendship if recipient is in sender's friend circle, {@code Integer.MAX_VALUE} otherwise.
      */
     public int isInFriendCircle(Transaction transaction, int maxDegree) {
         return searchAlgorithm.search(this, transaction.getSenderUID(), transaction.getRecipientUID(), maxDegree);
     }
+
 
     Set<Long> getAllUserIDs() {
         return adjacencyList.keySet();
@@ -62,6 +61,10 @@ public class UserTransactionGraph extends UndirectedGraph<Long> {
     @VisibleForTesting
     public void clear() {
         super.adjacencyList.clear();
+    }
+
+    private static class LazyHolder {
+        private static final UserTransactionGraph INSTANCE = new UserTransactionGraph();
     }
 
 }

@@ -20,7 +20,7 @@ public class TransactionValidationsTest {
     private Date date = new Date();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         userTransactionGraph = UserTransactionGraph.getInstance();
         userTransactionHistory = UserTransactionHistory.getInstance();
         transactionValidations = TransactionValidations.getInstance();
@@ -48,20 +48,20 @@ public class TransactionValidationsTest {
     }
 
     @Test
-    public void testIsVerifiedReceiver() throws Exception {
+    public void testIsVerifiedReceiver() {
         assertEquals(TransactionStatus.TRUSTED, transactionValidations.isVerifiedReceiver(getMockTransaction(0, 1, 3), 1));
         assertEquals(TransactionStatus.UNVERIFIED, transactionValidations.isVerifiedReceiver(getMockTransaction(0, 2, 3), 1));
         assertEquals(TransactionStatus.TRUSTED, transactionValidations.isVerifiedReceiver(getMockTransaction(0, 2, 3), 2));
     }
 
     @Test
-    public void testHasReceivedTooMany() throws Exception {
+    public void testHasReceivedTooMany() {
         assertEquals(TransactionStatus.UNVERIFIED, transactionValidations.hasReceivedTooMany(getMockTransaction(0, 1, 8)));
         assertEquals(TransactionStatus.TRUSTED, transactionValidations.hasReceivedTooMany(getMockTransaction(0, 3, 8)));
     }
 
     @Test
-    public void testIsAmountInconsistent() throws Exception {
+    public void testIsAmountInconsistent() {
         assertEquals(TransactionStatus.TRUSTED, transactionValidations.isAmountInconsistent(getMockTransaction(0, 1, 8)));
         assertEquals(TransactionStatus.UNVERIFIED, transactionValidations.isAmountInconsistent(getMockTransaction(0, 1, 9)));
     }

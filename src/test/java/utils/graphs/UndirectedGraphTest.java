@@ -15,7 +15,7 @@ public class UndirectedGraphTest {
     private UndirectedGraph<Integer> graph;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         graph = new UndirectedGraph<>();
     }
 

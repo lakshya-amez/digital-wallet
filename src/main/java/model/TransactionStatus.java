@@ -3,8 +3,8 @@ package model;
 /**
  * Enumerates the various possible transaction statuses.
  * <ul>
- *     <li> {@code TRUSTED}: Transaction is trusted and can go through. </li>
- *     <li> {@code UNVERIFIED}: Transaction is unverified and requires the attention of the user(s) or system admins. </li>
+ * <li> {@code TRUSTED}: Transaction is trusted and can go through. </li>
+ * <li> {@code UNVERIFIED}: Transaction is unverified and requires the attention of the user(s) or system admins. </li>
  * </ul>
  */
 public enum TransactionStatus {

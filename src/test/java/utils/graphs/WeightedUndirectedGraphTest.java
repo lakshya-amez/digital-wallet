@@ -15,7 +15,7 @@ public class WeightedUndirectedGraphTest {
     private WeightedUndirectedGraph<Integer> graph;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         graph = new WeightedUndirectedGraph<>();
     }
 

@@ -25,6 +25,7 @@ public class TransactionQueue implements Closeable {
 
     /**
      * Fetches the next transaction line from the file.
+     *
      * @return {@link String} consisting of the next transaction in the csv file.
      */
     public String getTransaction() {

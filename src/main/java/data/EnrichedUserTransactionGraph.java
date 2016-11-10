@@ -23,26 +23,22 @@ public class EnrichedUserTransactionGraph extends WeightedUndirectedGraph<Long> 
     private UserTransactionGraph userTransactionGraph;
     private GraphSearch<Long> graphSearch;
 
-    private static class LazyHolder {
-        private static final EnrichedUserTransactionGraph INSTANCE = new EnrichedUserTransactionGraph();
+    private EnrichedUserTransactionGraph() {
+        userTransactionGraph = UserTransactionGraph.getInstance();
+        graphSearch = GraphSearchFactory.getGraphTraversalImplementation(GraphSearchAlgorithm.BFS);
     }
 
     public static EnrichedUserTransactionGraph getInstance() {
         return LazyHolder.INSTANCE;
     }
 
-    private EnrichedUserTransactionGraph() {
-        userTransactionGraph = UserTransactionGraph.getInstance();
-        graphSearch = GraphSearchFactory.getGraphTraversalImplementation(GraphSearchAlgorithm.BFS);
-    }
-
     /**
      * Enriches the {@link UserTransactionGraph} by running BFS on each node and adding edges upto {@code MAX_DEGREE}.
      */
     public void enrichUserTransactionGraph() {
-        for (Long userId: userTransactionGraph.getAllUserIDs()) {
+        for (Long userId : userTransactionGraph.getAllUserIDs()) {
             Map<Long, Integer> friendCircle = graphSearch.search(userTransactionGraph, userId, MAX_DEGREE);
-            for (Map.Entry<Long, Integer> friend: friendCircle.entrySet()) {
+            for (Map.Entry<Long, Integer> friend : friendCircle.entrySet()) {
                 addVertex(userId);
                 addVertex(friend.getKey());
                 addEdge(userId, friend.getKey(), new Double(friend.getValue()));
@@ -52,8 +48,9 @@ public class EnrichedUserTransactionGraph extends WeightedUndirectedGraph<Long> 
 
     /**
      * Check whether recipient is in sender's friend circle up to given max degree.
+     *
      * @param transaction The user for which to fetch the friend circle.
-     * @param maxDegree The max degree of friendship to be considered.
+     * @param maxDegree   The max degree of friendship to be considered.
      * @return {@code int} value indicating degree of friendship if recipient is in sender's friend circle, {@code Integer.MAX_VALUE} otherwise.
      */
     public int isInFriendCircle(Transaction transaction, int maxDegree) {
@@ -67,6 +64,10 @@ public class EnrichedUserTransactionGraph extends WeightedUndirectedGraph<Long> 
     @VisibleForTesting
     public void clear() {
         super.adjacencyList.clear();
+    }
+
+    private static class LazyHolder {
+        private static final EnrichedUserTransactionGraph INSTANCE = new EnrichedUserTransactionGraph();
     }
 
 }

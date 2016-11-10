@@ -14,7 +14,7 @@ public class TransactionParserTest {
     private Transaction expectedOutput;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         input = "2016-11-02 09:49:29, 52575, 1120, 25.32, Spam";
         expectedOutput = new Transaction(new Date(1478098169000L), 52575, 1120, 25.32, "Spam");
     }

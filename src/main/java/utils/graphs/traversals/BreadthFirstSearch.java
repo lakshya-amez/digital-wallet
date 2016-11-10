@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
  * Breadth First Search implementation of {@link GraphSearch}.
+ *
  * @param <V> data type of vertices
  */
 public class BreadthFirstSearch<V> implements GraphSearch<V> {
@@ -67,6 +68,15 @@ public class BreadthFirstSearch<V> implements GraphSearch<V> {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     * Traverses the graph starting from the source vertex to find all reachable vertices, up to a given max distance
+     * from the source vertex.
+     *
+     * @param graph   {@link UnlabelledGraph} object to be traversed
+     * @param source  vertex from which graph traversal starts
+     * @param maxDist maximum distance to be considered from the source vertex
+     * @return Map of reachable vertices and their corresponding distances from the source vertex.
+     */
     @Override
     public Map<V, Integer> search(UnlabelledGraph<V> graph, V source, int maxDist) {
         if (source == null) {

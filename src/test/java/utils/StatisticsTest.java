@@ -14,7 +14,7 @@ public class StatisticsTest {
     private List<Double> vals;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vals = ImmutableList.of(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
     }
 

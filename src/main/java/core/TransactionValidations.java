@@ -7,7 +7,9 @@ import model.Transaction;
 import model.TransactionStatus;
 import utils.Statistics;
 
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -28,10 +30,6 @@ public class TransactionValidations {
         enrichedUserTransactionGraph = EnrichedUserTransactionGraph.getInstance();
     }
 
-    private static class LazyHolder {
-        private static final TransactionValidations INSTANCE = new TransactionValidations();
-    }
-
     public static TransactionValidations getInstance() {
         return LazyHolder.INSTANCE;
     }
@@ -39,8 +37,9 @@ public class TransactionValidations {
     /**
      * Check whether the recipient is a {@code TRUSTED} user or not by checking whether the recipient belongs in the
      * sender's friend circle up to the given max degree.
+     *
      * @param transaction {@link Transaction} to be verified
-     * @param maxDegree
+     * @param maxDegree maximum degree of friendship to be considered
      * @return {@code TransactionStatus.TRUSTED} if recipient is trusted, {@code TransactionStatus.UNVERIFIED} otherwise.
      */
     public TransactionStatus isVerifiedReceiver(Transaction transaction, int maxDegree) {
@@ -55,8 +54,10 @@ public class TransactionValidations {
 
     /**
      * Check whether the recipient has been on the receiving end of more than M (configured; M < K, the max no.
-     * of recent transactions maintained for a user) transactions within a configured time period T which maybe a cause
+     * of recent transactions maintained for a user in {@link UserTransactionHistory}) transactions within a
+     * configured time period T which maybe a cause
      * of suspicion.
+     *
      * @param transaction {@link Transaction} to be verified
      * @return {@code TransactionStatus.TRUSTED} if there is no cause for suspicion, {@code TransactionStatus.UNVERIFIED} otherwise.
      */
@@ -84,6 +85,7 @@ public class TransactionValidations {
 
     /**
      * Check whether the user is sending an amount that is suspiciously different from the ones he's sent recently.
+     *
      * @param transaction {@link Transaction} to be verified
      * @return {@code TransactionStatus.TRUSTED} if there is no cause for suspicion, {@code TransactionStatus.UNVERIFIED} otherwise.
      */
@@ -107,5 +109,9 @@ public class TransactionValidations {
         }
 
         return TransactionStatus.TRUSTED;
+    }
+
+    private static class LazyHolder {
+        private static final TransactionValidations INSTANCE = new TransactionValidations();
     }
 }

@@ -17,7 +17,7 @@ public class UserTransactionHistoryTest {
     private Date date = new Date();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         history = UserTransactionHistory.getInstance();
     }
 
