@@ -1,5 +1,6 @@
 import core.TransactionParser;
 import core.TransactionValidations;
+//import data.EnrichedUserTransactionGraph;
 import data.TransactionQueue;
 import data.UserTransactionGraph;
 import data.UserTransactionHistory;
@@ -15,6 +16,7 @@ public class AntiFraud implements Closeable {
 
     private UserTransactionGraph userTransactionGraph;
     private UserTransactionHistory userTransactionHistory;
+    //private EnrichedUserTransactionGraph enrichedUserTransactionGraph;
     private TransactionValidations transactionValidations;
     private TransactionQueue batchTransactionQueue;
     @Getter
@@ -26,6 +28,7 @@ public class AntiFraud implements Closeable {
     public AntiFraud(String args[]) {
         userTransactionGraph = UserTransactionGraph.getInstance();
         userTransactionHistory = UserTransactionHistory.getInstance();
+        //enrichedUserTransactionGraph = EnrichedUserTransactionGraph.getInstance();
 
         transactionValidations = TransactionValidations.getInstance();
 
@@ -59,6 +62,8 @@ public class AntiFraud implements Closeable {
             userTransactionGraph.updateGraph(t);
             userTransactionHistory.addTransaction(t);
         }
+        System.out.println("Caching user friend circles in enriched graph...");
+        //enrichedUserTransactionGraph.enrichUserTransactionGraph();
         System.out.println("Initialization Complete!");
     }
 

@@ -1,5 +1,6 @@
 package core;
 
+import data.EnrichedUserTransactionGraph;
 import data.UserTransactionGraph;
 import data.UserTransactionHistory;
 import model.Transaction;
@@ -19,10 +20,12 @@ public class TransactionValidations {
 
     private UserTransactionGraph userTransactionGraph;
     private UserTransactionHistory userTransactionHistory;
+    private EnrichedUserTransactionGraph enrichedUserTransactionGraph;
 
     private TransactionValidations() {
         userTransactionGraph = UserTransactionGraph.getInstance();
         userTransactionHistory = UserTransactionHistory.getInstance();
+        enrichedUserTransactionGraph = EnrichedUserTransactionGraph.getInstance();
     }
 
     private static class LazyHolder {
@@ -41,6 +44,9 @@ public class TransactionValidations {
      * @return {@code TransactionStatus.TRUSTED} if recipient is trusted, {@code TransactionStatus.UNVERIFIED} otherwise.
      */
     public TransactionStatus isVerifiedReceiver(Transaction transaction, int maxDegree) {
+        if (enrichedUserTransactionGraph.isInFriendCircle(transaction, maxDegree) <= maxDegree) {
+            return TransactionStatus.TRUSTED;
+        }
         if (userTransactionGraph.isInFriendCircle(transaction, maxDegree) <= maxDegree) {
             return TransactionStatus.TRUSTED;
         }

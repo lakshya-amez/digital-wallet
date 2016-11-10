@@ -2,14 +2,17 @@ package utils.graphs.traversals;
 
 import org.junit.Before;
 import org.junit.Test;
-import utils.graphs.Graph;
 import utils.graphs.UndirectedGraph;
+import utils.graphs.UnlabelledGraph;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class BreadthFirstSearchTest {
 
-    private Graph<Integer> graph;
+    private UnlabelledGraph<Integer> graph;
     private GraphSearch<Integer> searchAlgorithm;
 
     @Before
@@ -46,9 +49,24 @@ public class BreadthFirstSearchTest {
     }
 
     @Test
-    public void traverse() throws Exception {
+    public void testSearchDestination() {
         assertEquals(3, searchAlgorithm.search(graph, 0, 5, 4));
         assertEquals(Integer.MAX_VALUE, searchAlgorithm.search(graph, 0, 8, 4));
+    }
+
+    @Test
+    public void testSearchReachable() {
+        Map<Integer, Integer> expected = new HashMap<>();
+        expected.put(0, 0);
+        expected.put(1, 1);
+        expected.put(2, 1);
+        expected.put(3, 2);
+        expected.put(9, 2);
+        expected.put(4, 3);
+        expected.put(5, 3);
+        expected.put(7, 4);
+        expected.put(6, 4);
+        assertEquals(expected, searchAlgorithm.search(graph, 0, 4));
     }
 
 }

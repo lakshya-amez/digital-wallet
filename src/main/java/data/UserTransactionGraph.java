@@ -7,6 +7,8 @@ import utils.graphs.traversals.GraphSearch;
 import utils.graphs.traversals.GraphSearchAlgorithm;
 import utils.graphs.traversals.GraphSearchFactory;
 
+import java.util.Set;
+
 /**
  * An undirected graph of users connected via previous transactions. The vertices are userIDs. <br/>
  * <b>NOTE: </b> Ideally this could have been stored in a graph database like <a href="https://neo4j.com/">Neo4j</a>.
@@ -51,6 +53,10 @@ public class UserTransactionGraph extends UndirectedGraph<Long> {
      */
     public int isInFriendCircle(Transaction transaction, int maxDegree) {
         return searchAlgorithm.search(this, transaction.getSenderUID(), transaction.getRecipientUID(), maxDegree);
+    }
+
+    Set<Long> getAllUserIDs() {
+        return adjacencyList.keySet();
     }
 
     @VisibleForTesting

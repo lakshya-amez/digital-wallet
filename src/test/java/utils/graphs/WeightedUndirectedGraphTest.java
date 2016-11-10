@@ -1,6 +1,6 @@
 package utils.graphs;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import utils.graphs.exceptions.VertexNotPresentException;
@@ -10,13 +10,13 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class UndirectedGraphTest {
+public class WeightedUndirectedGraphTest {
 
-    private UndirectedGraph<Integer> graph;
+    private WeightedUndirectedGraph<Integer> graph;
 
     @Before
     public void setUp() throws Exception {
-        graph = new UndirectedGraph<>();
+        graph = new WeightedUndirectedGraph<>();
     }
 
     @Test(expected = VertexNullException.class)
@@ -37,19 +37,19 @@ public class UndirectedGraphTest {
 
     @Test(expected = VertexNullException.class)
     public void testAddEdgeNullVertex() {
-        graph.addEdge(null, 0);
+        graph.addEdge(null, 0, 1.0);
     }
 
     @Test(expected = VertexNotPresentException.class)
     public void testAddEdgeAbsentVertex() {
-        graph.addEdge(0, 1);
+        graph.addEdge(0, 1, 1.0);
     }
 
     @Test
     public void testAddEdgeValidCase() {
         graph.addVertex(0);
         graph.addVertex(1);
-        assertTrue(graph.addEdge(0, 1));
+        assertTrue(graph.addEdge(0, 1, 1.0));
     }
 
     @Test
@@ -64,11 +64,11 @@ public class UndirectedGraphTest {
     public void testContainsEdge() {
         graph.addVertex(0);
         graph.addVertex(1);
-        graph.addEdge(0, 1);
-        assertFalse(graph.containsEdge(0, 2));
-        assertFalse(graph.containsEdge(2, 0));
-        assertTrue(graph.containsEdge(1, 0));
-        assertTrue(graph.containsEdge(0, 1));
+        graph.addEdge(0, 1, 1.0);
+        assertNull(graph.containsEdge(0, 2));
+        assertNull(graph.containsEdge(2, 0));
+        assertEquals(1.0, graph.containsEdge(1, 0), 1e-6);
+        assertEquals(1.0, graph.containsEdge(0, 1), 1e-6);
     }
 
     @Test
@@ -77,10 +77,10 @@ public class UndirectedGraphTest {
         graph.addVertex(1);
         graph.addVertex(2);
 
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
+        graph.addEdge(0, 1, 1.0);
+        graph.addEdge(0, 2, 2.0);
 
-        Set<Integer> expected = ImmutableSet.of(1, 2);
+        Map<Integer, Double> expected = ImmutableMap.of(1, 1.0, 2, 2.0);
         assertEquals(expected, graph.getNeighbors(0));
     }
 

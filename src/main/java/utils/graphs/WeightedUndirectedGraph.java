@@ -5,16 +5,16 @@ import utils.graphs.exceptions.VertexNullException;
 import java.util.*;
 
 /**
- * An undirected graph implementation of {@link Graph}. Stores the graph in an adjacency list form as: <br/>
- * <b><i> V<sub>source</sub> --> V<sub>destination</sub></i></b> <br/>
+ * A weighted undirected graph implementation of {@link Graph}. Stores the graph in an adjacency list form as: <br/>
+ * <b><i> V<sub>source</sub> --> V<sub>destination</sub>, W</i></b> <br/>
  * The vertices passed as arguments may not be {@code null}.
  * @param <V> data type of vertices
  */
-public class UndirectedGraph<V> extends AbstractGraph<V> implements UnlabelledGraph<V> {
+public class WeightedUndirectedGraph<V> extends AbstractGraph<V> implements LabelledGraph<V, Double> {
 
-    protected Map<V, Set<V>> adjacencyList;
+    protected Map<V, Map<V, Double>> adjacencyList;
 
-    public UndirectedGraph() {
+    public WeightedUndirectedGraph() {
         adjacencyList = new HashMap<>();
     }
 
@@ -37,7 +37,7 @@ public class UndirectedGraph<V> extends AbstractGraph<V> implements UnlabelledGr
         if (adjacencyList.containsKey(v)) {
             return false;
         }
-        adjacencyList.put(v, new HashSet<>());
+        adjacencyList.put(v, new HashMap<>());
 
         return true;
     }
@@ -46,15 +46,16 @@ public class UndirectedGraph<V> extends AbstractGraph<V> implements UnlabelledGr
      * Adds an edge to the graph. Asserts that both the vertices are present in the graph.
      * @param v1 from-vertex
      * @param v2 to-vertex
+     * @param w edge-weight
      * @return {@code true} if the edge was successfully added to the graph.
      * It is O(1) operation.
      */
     @Override
-    public boolean addEdge(V v1, V v2) {
+    public boolean addEdge(V v1, V v2, Double w) {
         assertVertexExists(v1);
         assertVertexExists(v2);
-        adjacencyList.get(v1).add(v2);
-        adjacencyList.get(v2).add(v1);
+        adjacencyList.get(v1).put(v2, w);
+        adjacencyList.get(v2).put(v1, w);
 
         return true;
     }
@@ -74,21 +75,24 @@ public class UndirectedGraph<V> extends AbstractGraph<V> implements UnlabelledGr
      * Determine whether edge is present in the graph.
      * @param v1 source vertex
      * @param v2 destination vertex
-     * @return {@code true}, if edge is present in the graph, {@code false} otherwise.
+     * @return edge weight, if edge is present in the graph, {@code null} otherwise.
      * It is O(1) operation.
      */
     @Override
-    public boolean containsEdge(V v1, V v2) {
-        return containsVertex(v1) && adjacencyList.get(v1).contains(v2);
+    public Double containsEdge(V v1, V v2) {
+        if (!containsVertex(v1)) {
+            return null;
+        }
+        return adjacencyList.get(v1).get(v2);
     }
 
     /**
      * Get directly connected neighbors of a given source vertex in the graph. Asserts the presence of the vertex in the graph.
      * @param v source vertex
-     * @return set of vertices that are directly connected the the source vertex.
+     * @return set of vertices that are directly connected the the source vertex and their edge weights
      */
     @Override
-    public Set<V> getNeighbors(V v) {
+    public Map<V, Double> getNeighbors(V v) {
         assertVertexExists(v);
         return adjacencyList.get(v);
     }
